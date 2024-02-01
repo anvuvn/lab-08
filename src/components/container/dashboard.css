@@ -28,3 +28,8 @@
       width: 100%;
       text-align: left;
   }
+
+  .comment-details
+  {
+    background-color: lightgreen;
+  }

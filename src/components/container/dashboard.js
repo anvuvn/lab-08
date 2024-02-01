@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import './dashboard.css';
 
 import Posts from '../posts/posts';
@@ -7,6 +7,8 @@ import PostDetails from '../postDetails/postDetails';
 import { getAll } from '../services/post.service';
 
 import { usePostContext } from '../context/post.context';
+import AddPost from '../addPost/addPost';
+import Comments from '../comment/comments';
 
 const Dashboard = (props) => {
   const { selectedPostId, setPostId } = usePostContext();
@@ -15,6 +17,11 @@ const Dashboard = (props) => {
 
   const [currentTitle, setCurrentTitle] = useState('');
   const [posts, setPosts] = useState([]);
+
+  const commentMemo = useMemo(
+    () => <Comments post={selectedPost}></Comments>,
+    [selectedPost]
+  );
 
   const itemClickHandler = (post) => {
     setSelectedPost(post);
@@ -65,8 +72,12 @@ const Dashboard = (props) => {
           ''
         )}
       </div>
+      <div>{commentMemo}</div>
       <div>
         {selectedPostId ? <div>Selected Post Id: {selectedPostId}</div> : ''}
+      </div>
+      <div>
+        <AddPost postAdded={reloadData} />
       </div>
     </div>
   );

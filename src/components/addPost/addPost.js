@@ -1,32 +1,45 @@
-import React from 'react';
+import { useRef, useState } from 'react';
+import { add } from '../services/post.service';
 
-const addPost = () => {
+const AddPost = ({ postAdded }) => {
+  const [post, setPost] = useState({});
+  const formRef = useRef(null);
+  const addPostHandler = (e) => {
+    e.preventDefault();
+
+    let post = {
+      title: formRef.current['title'].value,
+      authorId: formRef.current['author'].value,
+      content: formRef.current['content'].value,
+    };
+    add(post).then((res) => {
+      alert('New Post added');
+      postAdded();
+    });
+  };
+
   return (
-    <div>
+    <div className="add-post">
       <h1>Add new Post</h1>
-      <div className="row">
-        <label>Title</label>
-        <input value={post.title} onChange={(e) => onInputChange('title', e)} />
-      </div>
-      <div className="row">
-        <label>Author</label>
-        <input
-          value={post.author}
-          onChange={(e) => onInputChange('author', e)}
-        />
-      </div>
-      <div className="row">
-        <label>Content</label>
-        <input
-          value={post.content}
-          onChange={(e) => onInputChange('content', e)}
-        />
-      </div>
-      <div className="row">
-        <button onClick={addPostHandler}>Add Post</button>
-      </div>
+      <form ref={formRef}>
+        <div className="row">
+          <label>Title</label>
+          <input name="title" value={post.title} />
+        </div>
+        <div className="row">
+          <label>Author Id</label>
+          <input name="author" value={post.authorId} />
+        </div>
+        <div className="row">
+          <label>Content</label>
+          <input name="content" value={post.content} />
+        </div>
+        <div className="row">
+          <button onClick={(e) => addPostHandler(e)}>Add Post</button>
+        </div>
+      </form>
     </div>
   );
 };
 
-export default addPost;
+export default AddPost;
